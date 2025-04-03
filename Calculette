@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test DISC</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin: 20px; }
+        .question { margin-bottom: 15px; }
+        button { padding: 10px; margin-top: 20px; cursor: pointer; }
+        canvas { max-width: 400px; margin: auto; }
+    </style>
+</head>
+<body>
+    <h2>Test DISC - Identifiez votre profil</h2>
+    <form id="discForm">
+        <!-- Question 1 : Réaction face à un imprévu -->
+        <div class="question">
+            <p>1. Comment réagissez-vous face à un imprévu ?</p>
+            <label><input type="radio" name="q1" value="rouge"> Je prends des décisions rapides</label><br>
+            <label><input type="radio" name="q1" value="jaune"> J'en discute avec les autres</label><br>
+            <label><input type="radio" name="q1" value="vert"> Je préfère éviter les imprévus</label><br>
+            <label><input type="radio" name="q1" value="bleu"> Je réfléchis avant d'agir</label>
+        </div>
+
+        <!-- Question 2 : Style de travail -->
+        <div class="question">
+            <p>2. Quel est votre style de travail ?</p>
+            <label><input type="radio" name="q2" value="rouge"> Axé sur les résultats</label><br>
+            <label><input type="radio" name="q2" value="jaune"> Dynamique et social</label><br>
+            <label><input type="radio" name="q2" value="vert"> Calme et méthodique</label><br>
+            <label><input type="radio" name="q2" value="bleu"> Précis et rigoureux</label>
+        </div>
+
+        <!-- Question 3 : Comment géreriez-vous une situation sous pression ? -->
+        <div class="question">
+            <p>3. Comment géreriez-vous une situation sous pression ?</p>
+            <label><input type="radio" name="q3" value="rouge"> Je prends le contrôle et je mène à bien la tâche rapidement</label><br>
+            <label><input type="radio" name="q3" value="jaune"> Je demande de l’aide et essaie de garder une bonne humeur</label><br>
+            <label><input type="radio" name="q3" value="vert"> Je reste calme et réfléchis à la meilleure approche</label><br>
+            <label><input type="radio" name="q3" value="bleu"> Je préfère tout organiser avant d'agir pour ne rien manquer</label>
+        </div>
+
+        <!-- Question 4 : Préférence de travail -->
+        <div class="question">
+            <p>4. Préférez-vous travailler seul(e) ou en équipe ?</p>
+            <label><input type="radio" name="q4" value="rouge"> Seul(e), pour mieux maîtriser les résultats</label><br>
+            <label><input type="radio" name="q4" value="jaune"> En équipe, pour échanger des idées et de l'énergie</label><br>
+            <label><input type="radio" name="q4" value="vert"> Je m’adapte à la situation, cela dépend des tâches</label><br>
+            <label><input type="radio" name="q4" value="bleu"> Seul(e), pour plus de rigueur et de concentration</label>
+        </div>
+
+        <!-- Question 5 : Gestion des imprévus -->
+        <div class="question">
+            <p>5. Comment réagissez-vous si un imprévu survient (exemple : un client laisse l’appartement très sale) ?</p>
+            <label><input type="radio" name="q5" value="rouge"> Je m’organise et je vais droit au but</label><br>
+            <label><input type="radio" name="q5" value="jaune"> J'essaie de discuter avec les clients pour trouver une solution</label><br>
+            <label><input type="radio" name="q5" value="vert"> Je reste calme et je trouve un plan d’action structuré</label><br>
+            <label><input type="radio" name="q5" value="bleu"> Je m’assure de bien tout vérifier et tout nettoyer méthodiquement</label>
+        </div>
+
+        <button type="button" onclick="calculateDISC()">Voir les résultats</button>
+    </form>
+
+    <canvas id="discChart"></canvas>
+
+    <script>
+        function calculateDISC() {
+            let scores = { rouge: 0, jaune: 0, vert: 0, bleu: 0 };
+            let formData = new FormData(document.getElementById('discForm'));
+            formData.forEach(value => { scores[value]++; });
+
+            let total = Object.values(scores).reduce((a, b) => a + b, 0);
+            let percentages = {
+                rouge: (scores.rouge / total) * 100,
+                jaune: (scores.jaune / total) * 100,
+                vert: (scores.vert / total) * 100,
+                bleu: (scores.bleu / total) * 100
+            };
+
+            let ctx = document.getElementById('discChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['Rouge', 'Jaune', 'Vert', 'Bleu'],
+                    datasets: [{
+                        data: Object.values(percentages),
+                        backgroundColor: ['#ff0000', '#ffff00', '#00ff00', '#0000ff']
+                    }]
+                }
+            });
+        }
+    </script>
+</body>
+</html>
